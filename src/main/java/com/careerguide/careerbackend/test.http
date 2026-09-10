@@ -1,0 +1,39 @@
+POST http://localhost:8080/api/recommendations/evaluate
+Content-Type: application/json
+
+{
+  "profile": {
+    "name": "Test Student",
+    "email": "test@example.com"
+  },
+  "skills": [
+    "Java",
+    "Problem Solving",
+    "C Programming"
+  ],
+  "interests": [
+    "Software Development",
+    "Web Development"
+  ],
+  "answers": {
+    "1": "yes",
+    "2": "yes",
+    "3": "yes",
+    "4": "yes",
+    "13": "yes"
+  }
+}
+###
+
+GET http://localhost:8080/api/recommendations/latest
+###
+
+POST http://localhost:8080/api/students/profile
+Content-Type: application/json
+
+{
+  "name": "Test Student",
+  "email": "test@example.com",
+  "college": "Test College",
+  "course": "Computer Science"
+}

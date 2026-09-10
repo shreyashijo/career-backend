@@ -1,0 +1,99 @@
+# CareerGuide Backend API Documentation
+
+## Base URL
+
+http://localhost:8080
+
+---
+
+## 1. Save Student Profile
+
+### Endpoint
+
+POST /api/students/profile
+
+### Content-Type
+
+application/json
+
+### Request Body
+
+{
+  "fullName": "Test Student",
+  "age": 19,
+  "college": "Test College",
+  "course": "BTech Computer Science and Engineering",
+  "semester": "3rd Semester"
+}
+
+### Response
+
+{
+  "success": true,
+  "data": {
+    ...
+  }
+}
+
+---
+
+## 2. Evaluate Career Recommendations
+
+### Endpoint
+
+POST /api/recommendations/evaluate
+
+### Content-Type
+
+application/json
+
+### Request Body
+
+{
+  "profile": {
+    "fullName": "Test Student"
+  },
+  "skills": [
+    "Java",
+    "Problem Solving"
+  ],
+  "interests": [
+    "Software Development",
+    "Web Development"
+  ],
+  "answers": {
+    "1": "yes",
+    "2": "yes"
+  }
+}
+
+### Response
+
+{
+  "success": true,
+  "data": [
+    ...
+  ]
+}
+
+---
+
+## 3. Get Latest Recommendations
+
+### Endpoint
+
+GET /api/recommendations/latest
+
+### Response
+
+{
+  "success": true,
+  "data": {
+    "profile": {},
+    "skills": [],
+    "interests": [],
+    "answers": {},
+    "recommendations": [],
+    "generatedAt": "..."
+  }
+}
