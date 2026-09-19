@@ -6,13 +6,34 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.util.*;
 
+import com.careerguide.careerbackend.entity.Recommendation;
+import com.careerguide.careerbackend.repository.RecommendationRepository;
+
 @Service
 public class RecommendationService {
 
+    private final RecommendationRepository recommendationRepository;
+    private final StudentService studentService;
+
     private Map<String, Object> latestRecommendations;
+
+    public RecommendationService(
+            RecommendationRepository recommendationRepository,
+            StudentService studentService) {
+        this.recommendationRepository = recommendationRepository;
+        this.studentService = studentService;
+    }
 
     public Map<String, Object> evaluateRecommendations(
             RecommendationRequest request) {
+
+        Map<String, Object> profile = request.getProfile() != null
+                ? request.getProfile()
+                : new HashMap<>();
+
+        if (!profile.isEmpty()) {
+            studentService.saveProfile(profile);
+        }
 
         List<String> skills = request.getSkills() != null
                 ? request.getSkills()

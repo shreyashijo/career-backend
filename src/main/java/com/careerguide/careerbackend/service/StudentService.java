@@ -17,18 +17,59 @@ public class StudentService {
 
     public Map<String, Object> saveProfile(Map<String, Object> profileData) {
 
+        if (profileData == null) {
+            return Map.of();
+        }
+
         Student student = new Student();
 
-        student.setFullName((String) profileData.get("fullName"));
-        student.setEmail((String) profileData.get("email"));
-        student.setAge((Integer) profileData.get("age"));
-        student.setCollege((String) profileData.get("college"));
-        student.setCourse((String) profileData.get("course"));
-        student.setSemester((String) profileData.get("semester"));
+        student.setFullName(asString(profileData.get("fullName"), ""));
+        student.setEmail(asString(profileData.get("email"), null));
+        student.setAge(asInteger(profileData.get("age")));
+        student.setCollege(asString(profileData.get("college"), null));
+        student.setCourse(asString(profileData.get("course"), null));
+        student.setSemester(asString(profileData.get("semester"), null));
 
         studentRepository.save(student);
 
         return profileData;
+    }
+
+    private String asString(Object value, String defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+
+        if (value instanceof String stringValue) {
+            return stringValue;
+        }
+
+        return String.valueOf(value);
+    }
+
+    private Integer asInteger(Object value) {
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Number numberValue) {
+            return numberValue.intValue();
+        }
+
+        if (value instanceof String stringValue) {
+            String trimmed = stringValue.trim();
+            if (trimmed.isEmpty()) {
+                return null;
+            }
+
+            try {
+                return Integer.valueOf(trimmed);
+            } catch (NumberFormatException exception) {
+                return null;
+            }
+        }
+
+        return null;
     }
 
     public Map<String, Object> getLatestProfile() {
