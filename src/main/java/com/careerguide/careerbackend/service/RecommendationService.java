@@ -123,15 +123,34 @@ public class RecommendationService {
                         (Integer) b.get("matchPercentage"),
                         (Integer) a.get("matchPercentage")
                 ));
+List<Map<String, Object>> topThree =
+        recommendations.subList(
+                0,
+                Math.min(3, recommendations.size())
+        );
 
-        List<Map<String, Object>> topThree =
-                recommendations.subList(
-                        0,
-                        Math.min(3, recommendations.size())
-                );
+String studentName = profile.get("fullName") != null
+        ? profile.get("fullName").toString()
+        : "";
 
-        Map<String, Object> result = new HashMap<>();
+Instant generatedAt = Instant.now();
 
+for (Map<String, Object> recommendation : topThree) {
+    Recommendation entity = new Recommendation(
+            studentName,
+            (String) recommendation.get("title"),
+            (Integer) recommendation.get("matchPercentage"),
+            (String) recommendation.get("description"),
+            (String) recommendation.get("avgSalary"),
+            (String) recommendation.get("jobGrowth"),
+            generatedAt
+    );
+
+    recommendationRepository.save(entity);
+}
+
+Map<String, Object> result = new HashMap<>();
+       
         result.put("profile", request.getProfile());
         result.put("skills", skills);
         result.put("interests", interests);

@@ -21,10 +21,19 @@ public class StudentService {
             return Map.of();
         }
 
-        Student student = new Student();
+        String email = asString(profileData.get("email"), null);
+
+        Student student;
+
+        if (email != null && !email.isBlank()) {
+            student = studentRepository.findByEmail(email)
+                    .orElseGet(Student::new);
+        } else {
+            student = new Student();
+        }
 
         student.setFullName(asString(profileData.get("fullName"), ""));
-        student.setEmail(asString(profileData.get("email"), null));
+        student.setEmail(email);
         student.setAge(asInteger(profileData.get("age")));
         student.setCollege(asString(profileData.get("college"), null));
         student.setCourse(asString(profileData.get("course"), null));
@@ -58,6 +67,7 @@ public class StudentService {
 
         if (value instanceof String stringValue) {
             String trimmed = stringValue.trim();
+
             if (trimmed.isEmpty()) {
                 return null;
             }
