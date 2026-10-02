@@ -12,6 +12,9 @@ public class Student {
     @Column(name = "student_id")
     private Long studentId;
 
+    @Column(name = "auth_user_id", unique = true)
+    private Long authUserId;
+
     @Column(name = "full_name", nullable = false, length = 150)
     private String fullName;
 
@@ -104,6 +107,14 @@ public class Student {
 
     public void setProfilePayload(String profilePayload) {
         this.profilePayload = profilePayload;
+    }
+
+    public Long getAuthUserId() {
+        return authUserId;
+    }
+
+    public void setAuthUserId(Long authUserId) {
+        this.authUserId = authUserId;
     }
 
     public LocalDateTime getCreatedAt() {
