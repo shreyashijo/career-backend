@@ -86,4 +86,39 @@ public class RoadmapController {
                     ));
         }
     }
+
+    @PostMapping("/start")
+    public ResponseEntity<Map<String, Object>> startRoadmap(
+            @RequestBody(required = false) Map<String, String> body,
+            HttpSession session) {
+
+        Object userIdObj = session.getAttribute(SESSION_USER_ID);
+        if (userIdObj == null) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "Not authenticated"
+                    ));
+        }
+
+        Long userId = ((Number) userIdObj).longValue();
+        String careerId = body != null ? body.get("careerId") : null;
+
+        try {
+            Map<String, Object> result = roadmapService.startRoadmap(userId, careerId);
+            return ResponseEntity.ok(Map.of(
+                    "success", true,
+                    "message", "Roadmap started successfully",
+                    "data", result
+            ));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of(
+                            "success", false,
+                            "message", e.getMessage()
+                    ));
+        }
+    }
 }

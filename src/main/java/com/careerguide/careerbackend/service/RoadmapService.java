@@ -72,4 +72,30 @@ public class RoadmapService {
                 "updatedAt", saved.getUpdatedAt().toString()
         );
     }
+
+    public Map<String, Object> startRoadmap(Long userId, String careerId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("User ID is required");
+        }
+        if (careerId == null || careerId.trim().isEmpty()) {
+            throw new IllegalArgumentException("Career ID is required");
+        }
+
+        String sanitizedCareerId = careerId.trim();
+
+        Optional<RoadmapProgress> progressOpt = roadmapProgressRepository.findByUserIdAndCareerId(userId, sanitizedCareerId);
+        RoadmapProgress progress;
+        if (progressOpt.isPresent()) {
+            progress = progressOpt.get();
+        } else {
+            progress = new RoadmapProgress(userId, sanitizedCareerId, "[]");
+            progress = roadmapProgressRepository.save(progress);
+        }
+
+        return Map.of(
+                "careerId", progress.getCareerId(),
+                "roadmapStarted", true,
+                "updatedAt", progress.getUpdatedAt() != null ? progress.getUpdatedAt().toString() : ""
+        );
+    }
 }

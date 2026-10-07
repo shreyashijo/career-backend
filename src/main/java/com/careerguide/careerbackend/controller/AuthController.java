@@ -131,4 +131,45 @@ public class AuthController {
                 )
         );
     }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Map<String, Object>> forgotPassword(
+            @RequestBody Map<String, String> request) {
+
+        String email = request.get("email");
+        authService.processForgotPassword(email);
+
+        return ResponseEntity.ok(
+                Map.of(
+                        "success", true,
+                        "message", "If an account with that email exists, a password reset link has been sent."
+                )
+        );
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Map<String, Object>> resetPassword(
+            @RequestBody Map<String, String> request) {
+
+        try {
+            String token = request.get("token");
+            String newPassword = request.get("newPassword");
+
+            authService.processResetPassword(token, newPassword);
+
+            return ResponseEntity.ok(
+                    Map.of(
+                            "success", true,
+                            "message", "Password has been reset successfully."
+                    )
+            );
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of(
+                            "success", false,
+                            "message", e.getMessage()
+                    ));
+        }
+    }
 }

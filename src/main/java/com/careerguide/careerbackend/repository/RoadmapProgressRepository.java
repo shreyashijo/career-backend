@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RoadmapProgressRepository extends JpaRepository<RoadmapProgress, Long> {
 
     Optional<RoadmapProgress> findByUserIdAndCareerId(Long userId, String careerId);
+
+    java.util.List<RoadmapProgress> findByUserIdOrderByUpdatedAtDesc(Long userId);
 }
